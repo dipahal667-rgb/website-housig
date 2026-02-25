@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<title>মানিকদাহ হাউজিং প্রকল্প</title>
+
+<style>
+body{
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+}
+
+/* ===== Login Page ===== */
+#loginPage{
+    height:100vh;
+    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.login-box{
+    background:white;
+    padding:40px;
+    width:350px;
+    border-radius:15px;
+    text-align:center;
+    box-shadow:0 15px 35px rgba(0,0,0,0.4);
+}
+.login-box h2{
+    margin-bottom:20px;
+    color:#2c5364;
+}
+.login-box input{
+    width:90%;
+    padding:10px;
+    margin:10px 0;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
+.login-box button{
+    padding:10px 20px;
+    border:none;
+    border-radius:8px;
+    background:#2c5364;
+    color:white;
+    cursor:pointer;
+}
+.login-box button:hover{
+    background:#0f2027;
+}
+
+/* ===== Main Page ===== */
+#mainPage{
+    display:none;
+    background:linear-gradient(to right,#4facfe,#00f2fe);
+    min-height:100vh;
+}
+h1{
+    text-align:center;
+    padding:25px;
+    color:white;
+    font-size:35px;
+}
+.container{
+    display:grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap:15px;
+    padding:30px;
+}
+.plotBtn{
+    padding:15px;
+    font-size:16px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    background:white;
+    transition:0.3s;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+.plotBtn:hover{
+    background:#0077ff;
+    color:white;
+    transform:scale(1.1);
+}
+
+/* ===== Info Page ===== */
+#infoPage{
+    display:none;
+    height:100vh;
+    background:linear-gradient(135deg,#11998e,#38ef7d);
+    justify-content:center;
+    align-items:center;
+}
+.card{
+    background:white;
+    padding:40px;
+    width:420px;
+    border-radius:15px;
+    box-shadow:0 15px 35px rgba(0,0,0,0.4);
+}
+.card h2{
+    text-align:center;
+}
+.card p{
+    font-size:18px;
+    margin:12px 0;
+}
+.backBtn{
+    margin-top:20px;
+    padding:10px 20px;
+    border:none;
+    border-radius:8px;
+    background:#11998e;
+    color:white;
+    cursor:pointer;
+}
+.backBtn:hover{
+    background:#0b7d6e;
+}
+</style>
+</head>
+<body>
+
+<!-- ================= LOGIN PAGE ================= -->
+<div id="loginPage">
+    <div class="login-box">
+        <h2>মানিকদাহ হাউজিং প্রকল্প</h2>
+        <input type="password" id="password" placeholder="পাসওয়ার্ড দিন">
+        <br>
+        <button onclick="login()">লগইন</button>
+    </div>
+</div>
+
+<!-- ================= MAIN PAGE ================= -->
+<div id="mainPage">
+    <h1>মানিকদাহ হাউজিং প্রকল্প - প্লট তালিকা</h1>
+    <div class="container" id="buttons"></div>
+</div>
+
+<!-- ================= INFO PAGE ================= -->
+<div id="infoPage">
+    <div class="card">
+        <h2 id="plotTitle"></h2>
+        <p id="name"></p>
+        <p id="dag"></p>
+        <p id="land"></p>
+        <p id="namjari"></p>
+        <button class="backBtn" onclick="backToMain()">ফিরে যান</button>
+    </div>
+</div>
+
+<script>
+/* 🔴 এখানে পাসওয়ার্ড পরিবর্তন করুন */
+var correctPassword = "12345";
+
+/* 🔴 এখানে ১৭২ প্লটের তথ্য এডিট করা যাবে */
+var plots = [];
+for(let i=1;i<=172;i++){
+    plots[i] = {
+        name:"নাম লিখুন",
+        dag:"দাগ নং লিখুন",
+        land:"জমির পরিমাণ লিখুন",
+        namjari:"হয়নি"
+    };
+}
+
+/* উদাহরণ */
+plots[1] = {
+    name:"মোঃ রহমান",
+    dag:"১২৩",
+    land:"৫ শতাংশ",
+    namjari:"হয়েছে"
+};
+
+function login(){
+    var pass=document.getElementById("password").value;
+    if(pass===correctPassword){
+        document.getElementById("loginPage").style.display="none";
+        document.getElementById("mainPage").style.display="block";
+    }else{
+        alert("ভুল পাসওয়ার্ড!");
+    }
+}
+
+/* ১৭২ বাটন তৈরি */
+for(let i=1;i<=172;i++){
+    document.getElementById("buttons").innerHTML+=
+    `<button class="plotBtn" onclick="openPlot(${i})">প্লট নং ${i}</button>`;
+}
+
+function openPlot(num){
+    document.getElementById("mainPage").style.display="none";
+    document.getElementById("infoPage").style.display="flex";
+
+    document.getElementById("plotTitle").innerText="প্লট নং "+num;
+    document.getElementById("name").innerText="১। ব্যক্তির নাম: "+plots[num].name;
+    document.getElementById("dag").innerText="২। দাগ নং: "+plots[num].dag;
+    document.getElementById("land").innerText="৩। জমির পরিমাণ: "+plots[num].land;
+    document.getElementById("namjari").innerText="৪। নামজারি: "+plots[num].namjari;
+}
+
+function backToMain(){
+    document.getElementById("infoPage").style.display="none";
+    document.getElementById("mainPage").style.display="block";
+}
+</script>
+
+</body>
+</html>
